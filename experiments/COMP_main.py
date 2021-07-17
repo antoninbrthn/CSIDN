@@ -6,9 +6,6 @@ Script description:
 Main implementation of Lq, Forward and MAE models for real-world datasets SVHN and CIFAR10
 '''
 
-import sys
-print(sys.path)
-
 import pandas as pd
 import os
 import datetime
@@ -17,7 +14,6 @@ import utils.data_utils as data_utils
 import utils.noise_utils as noise_utils
 from utils.misc_utils import *
 import models.models_pytorch as models_pytorch
-print('IMPORTS OK')
 import torch.utils.data
 import torch.nn.functional as F
 import torch.optim as optim

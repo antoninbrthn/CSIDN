@@ -56,6 +56,8 @@ parser.add_argument('--use_weights', type = str2bool, default = False, help = 'C
 parser.add_argument('--update_mus', type = str2bool, default = True, help = 'Update mus iteratively')
 parser.add_argument('--truncate_ratios', type = str2bool, default = False, help = 'Truncate ratios when estimating mus')
 parser.add_argument('--truncate_factor', type = float, default = 0.5, help = 'Truncate factor')
+parser.add_argument('--perturbation_type', type = str, default = "normal", help = 'Type of noise perturbation: "normal", "skewed" or "over_conf".')
+parser.add_argument('--noise_perturbation', type = float, default = 0., help = 'Perturbation on confidence score for sensitivity analysis. Default: no perturbation.')
 parser.add_argument('--num_workers', type = int, default = 1, help = 'how many subprocesses to use for data loading')
 
 args = parser.parse_args()
