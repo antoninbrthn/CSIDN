@@ -68,18 +68,18 @@ if "MNIST" in args.dataset:
     input_size = 28 * 28
     n_class = 10
     input_channel = 1
-
 elif "CIFAR10" in args.dataset:
     print("Using CIFAR10 dataset")
     input_size = 32 * 32
     n_class = 10
     input_channel = 3
-
 elif "SVHN" in args.dataset:
     print("Using SVHN dataset")
     input_size = 32 * 32
     n_class = 10
     input_channel = 3
+else:
+    raise ValueError("Unrecognised dataset name.")
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Using device : {}".format(device))

@@ -62,23 +62,25 @@ args = parser.parse_args()
 
 # Dataset constants
 val_size = 0.2
-if args.dataset == "MNIST":
+
+if "MNIST" in args.dataset:
     print("Using MNIST dataset")
     input_size = 28 * 28
     n_class = 10
     input_channel = 1
-elif args.dataset == "CIFAR10":
+elif "CIFAR10" in args.dataset:
     print("Using CIFAR10 dataset")
     input_size = 32 * 32
     n_class = 10
     input_channel = 3
-elif args.dataset == "SVHN":
+elif "SVHN" in args.dataset:
     print("Using SVHN dataset")
     input_size = 32 * 32
     n_class = 10
     input_channel = 3
 else:
     raise ValueError("Unrecognised dataset name.")
+
 eps = 1e-2
 dummy_labels = False
 save_model = False
