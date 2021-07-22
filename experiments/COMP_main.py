@@ -6,21 +6,26 @@ Script description:
 Main implementation of Lq, Forward and MAE models for real-world datasets SVHN and CIFAR10
 '''
 
+import sys
+print(sys.path)
+
 import pandas as pd
 import os
 import datetime
-import torch.utils.data
-import torch.nn.functional as F
-import torch.optim as optim
 
 import utils.data_utils as data_utils
 import utils.noise_utils as noise_utils
 from utils.misc_utils import *
 import models.models_pytorch as models_pytorch
+print('IMPORTS OK')
+import torch.utils.data
+import torch.nn.functional as F
+import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 from torch.autograd import Variable
 
 import argparse
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--lr', type=float, default=0.001)
@@ -58,19 +63,19 @@ momentum_decay_epoch = args.mom_decay_start
 
 torch.manual_seed(random_seed)
 
-if args.dataset == "MNIST":
+if "MNIST" in args.dataset:
     print("Using MNIST dataset")
     input_size = 28 * 28
     n_class = 10
     input_channel = 1
 
-elif args.dataset == "CIFAR10":
+elif "CIFAR10" in args.dataset:
     print("Using CIFAR10 dataset")
     input_size = 32 * 32
     n_class = 10
     input_channel = 3
 
-elif args.dataset == "SVHN":
+elif "SVHN" in args.dataset:
     print("Using SVHN dataset")
     input_size = 32 * 32
     n_class = 10
