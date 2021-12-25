@@ -273,10 +273,10 @@ def main():
     testset = Clothing1M(path = data_path, mode = 'clean_test', dataset_type = 'drive',
                          transform = test_transform)
     print("Importing validset")
-    validset = Clothing1M_confidence(path = data_path, fn = "valid_export_jan21.txt",
+    validset = Clothing1M_confidence(path = data_path, fn = "valid_set_labels.txt",
                                      transform = test_transform, og_labels = False)
     print("Importing trainset")
-    noisyset = Clothing1M_confidence(path = data_path, fn = "noisy_export_jan21.txt",
+    noisyset = Clothing1M_confidence(path = data_path, fn = "train_set_labels.txt",
                                      transform = train_transform, og_labels = args["og_labels"])
 
     train_loader = torch.utils.data.DataLoader(noisyset,
