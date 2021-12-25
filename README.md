@@ -28,6 +28,8 @@ As described in the paper, we experiment on a synthetic dataset as well as CIFAR
 You can run the experiments on synthetic, CIFAR10 and SVHN experiments on the following [Google Colab Notebook](https://colab.research.google.com/drive/1bFDmVUlpYM70rN94WK0nw82-Gbe3Urp9?usp=sharing).
 
 ## Clothing1M experiment
+An example of training of ILFC and benchmark models on Clothing1M can be found in the following [Google Colab Notebook](https://colab.research.google.com/drive/1NDQQJE25Wus630xJ9UjvjDx8si9vw2dl?usp=sharing). 
+
 Train ILFC on the Clothing1M dataset:
 ```
 python experiments.ILFC_clothing.py --seed 123  --import_data_path <path to clothing1m dataset> \
