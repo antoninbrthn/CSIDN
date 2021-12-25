@@ -110,9 +110,9 @@ print("Arguments : ", args)
 
 # File to export results during training
 save_dir = os.path.join(args["result_dir"], 'clothing', args["comp_model"])
-if not os.path.exists(save_dir):
-    print(f"{save_dir} does not exist. Creating it.")
-    os.system('mkdir -p %s' % save_dir)
+os.makedirs(save_dir, exist_ok=True)
+if args["model_export"] != "":
+    os.makedirs(args["model_export"], exist_ok=True)
 model_str = f'clothing_{args["comp_model"]}'
 
 nowTime = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')

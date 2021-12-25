@@ -78,11 +78,6 @@ truncate_factor = args.truncate_factor
 if args.truncate_ratios:
     print("Set truncation factor to %.2f" % truncate_factor)
 
-save_model_dir = "./state/"
-save_model_path = save_model_dir + "model_save"
-if not os.path.exists(save_model_dir):
-    os.system('mkdir -p %s' % save_model_dir)
-
 if args.seed == 0:
     random_seed = np.random.randint(1000)
 else:
@@ -129,8 +124,11 @@ print("Arguments : ", args)
 
 # File to export results during training
 save_dir = os.path.join(args["result_dir"], 'clothing', 'ILFC')
-if not os.path.exists(save_dir):
-    os.system('mkdir -p %s' % save_dir)
+os.makedirs(save_dir, exist_ok=True)
+if args["model_export"] != "":
+    os.makedirs(args["model_export"], exist_ok=True)
+if args["noisy_model_export"] != "":
+    os.makedirs(args["noisy_model_export"], exist_ok=True)
 model_str = 'clothing_ILFC'
 
 nowTime = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
