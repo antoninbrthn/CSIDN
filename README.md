@@ -25,7 +25,7 @@ from [Google Colab](https://research.google.com/colaboratory/) notebooks.
 As described in the paper, we experiment on a synthetic dataset as well as CIFAR10 and SVHN by generating some instance-dependant label noise. Please contact _berthon.antonin[at]gmail[dot]com_ to receive a download link.
 
 ## Synthetic, CIFAR10 and SVHN experiments
-TBD 
+You can run the experiments on synthetic, CIFAR10 and SVHN experiments on the following [Google Colab Notebook](https://colab.research.google.com/drive/1bFDmVUlpYM70rN94WK0nw82-Gbe3Urp9?usp=sharing).
 
 ## Clothing1M experiment
 Train ILFC on the Clothing1M dataset:
