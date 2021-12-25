@@ -210,13 +210,11 @@ def main():
         noisyset = Clothing1M(path = data_path, mode = 'noisy_train', dataset_type = 'drive',
                               transform = train_transform)
     else:
-        print("Importing Clothing1M_confidence validset")
-        validset = Clothing1M_confidence(path = data_path, fn = "valid_export_jan21.txt",
+        print("Importing Clothing1M validset")
+        validset = Clothing1M_confidence(path = data_path, fn = "valid_set_labels.txt",
                                          transform = test_transform, og_labels = False)
-        # args["og_labels"]) TEMP SOLUTION : ALWAYS USE OLD LABELS
-        # in order to get switch matrix
-        print("Importing Clothing1M_confidence trainset")
-        noisyset = Clothing1M_confidence(path = data_path, fn = "noisy_export_jan21.txt",
+        print("Importing Clothing1M confidence scored (CSIDN) trainset")
+        noisyset = Clothing1M_confidence(path = data_path, fn = "train_set_labels.txt",
                                          transform = train_transform, og_labels = args["og_labels"])
 
     train_loader = torch.utils.data.DataLoader(noisyset,
@@ -244,7 +242,6 @@ def main():
         y_train_noisy, y_train_true, r_train = noisyset.get_labels()
 
         # Compute S
-        # TODO
         S = np.zeros((n_class, n_class))
         for i in range(n_class):
             for j in range(n_class):
