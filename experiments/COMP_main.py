@@ -1,10 +1,10 @@
-'''
+"""
 Code for paper "Confidence Scores Make Instance-dependent Label-noise Learning Possible"
 Antonin Berthon, 2021
 -----------
 Script description:
 Main implementation of Lq, Forward and MAE models for real-world datasets SVHN and CIFAR10
-'''
+"""
 
 import pandas as pd
 import os
@@ -24,26 +24,38 @@ import argparse
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--lr', type=float, default=0.001)
-parser.add_argument('--result_dir', type=str, help='dir to save result txt files',
-                    default='results/')
-parser.add_argument('--import_data_path', type=str, help='dir to import dataset',
-                    default='Toy_datasets/data/')
-parser.add_argument('--dataset', type=str, help='MNIST, CIFAR10', default='CIFAR10')
-parser.add_argument('--model', type=str, help='cnn, mlp, large_cnn', default='mlp')
-parser.add_argument('--noisy_model', type=str, help='cnn, mlp, large_cnn', default='mlp')
-parser.add_argument('--comp_model', type=str, help='MAE, F, LQ, CCE', default='F')
-parser.add_argument('--nb_epoch', type=int, default=10)
-parser.add_argument('--warm_start', type=int, default=5)
-parser.add_argument('--noisy_model_epochs', type=int, default=0)
-parser.add_argument('--n_features', type=int, help="Nb of feature per convolution for cnn",
-                    default=128)
-parser.add_argument('--seed', type=int, default=0)
-parser.add_argument('--print_freq', type=int, default=100)
-parser.add_argument('--bs', type=int, default=64)
-parser.add_argument('--mom_decay_start', type=int, default=40)
-parser.add_argument('--num_workers', type=int, default=1,
-                    help='how many subprocesses to use for data loading')
+parser.add_argument("--lr", type=float, default=0.001)
+parser.add_argument(
+    "--result_dir", type=str, help="dir to save result txt files", default="results/"
+)
+parser.add_argument(
+    "--import_data_path",
+    type=str,
+    help="dir to import dataset",
+    default="Toy_datasets/data/",
+)
+parser.add_argument("--dataset", type=str, help="MNIST, CIFAR10", default="CIFAR10")
+parser.add_argument("--model", type=str, help="cnn, mlp, large_cnn", default="mlp")
+parser.add_argument(
+    "--noisy_model", type=str, help="cnn, mlp, large_cnn", default="mlp"
+)
+parser.add_argument("--comp_model", type=str, help="MAE, F, LQ, CCE", default="F")
+parser.add_argument("--nb_epoch", type=int, default=10)
+parser.add_argument("--warm_start", type=int, default=5)
+parser.add_argument("--noisy_model_epochs", type=int, default=0)
+parser.add_argument(
+    "--n_features", type=int, help="Nb of feature per convolution for cnn", default=128
+)
+parser.add_argument("--seed", type=int, default=0)
+parser.add_argument("--print_freq", type=int, default=100)
+parser.add_argument("--bs", type=int, default=64)
+parser.add_argument("--mom_decay_start", type=int, default=40)
+parser.add_argument(
+    "--num_workers",
+    type=int,
+    default=1,
+    help="how many subprocesses to use for data loading",
+)
 
 args = parser.parse_args()
 
@@ -80,35 +92,36 @@ else:
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Using device : {}".format(device))
 
-args = {"n_class": n_class,
-        "dataset": args.dataset,
-        "result_dir": args.result_dir,
-        "input_size": input_size,
-        "input_channel": input_channel,
-        "n_features": args.n_features,
-        "lr": args.lr,
-        "bs": args.bs,
-        "nb_epoch": args.nb_epoch,
-        "print_freq": args.print_freq,
-        "import_data_path": args.import_data_path,
-        "model": args.model,
-        "noisy_model_epochs": args.noisy_model_epochs,
-        "dummy_labels": dummy_labels,
-        "device": device,
-        "warm_start": args.warm_start,
-        "noisy_model": args.noisy_model,
-        "comp_model": args.comp_model
-        }
+args = {
+    "n_class": n_class,
+    "dataset": args.dataset,
+    "result_dir": args.result_dir,
+    "input_size": input_size,
+    "input_channel": input_channel,
+    "n_features": args.n_features,
+    "lr": args.lr,
+    "bs": args.bs,
+    "nb_epoch": args.nb_epoch,
+    "print_freq": args.print_freq,
+    "import_data_path": args.import_data_path,
+    "model": args.model,
+    "noisy_model_epochs": args.noisy_model_epochs,
+    "dummy_labels": dummy_labels,
+    "device": device,
+    "warm_start": args.warm_start,
+    "noisy_model": args.noisy_model,
+    "comp_model": args.comp_model,
+}
 
 # File to export results during training
 save_dir = args["result_dir"]
 os.makedirs(save_dir, exist_ok=True)
-nowTime = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
-model_str = args["dataset"] + '_' + args["comp_model"] + nowTime
+nowTime = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+model_str = args["dataset"] + "_" + args["comp_model"] + nowTime
 
-txtfile = os.path.join(save_dir,model_str + ".txt")
+txtfile = os.path.join(save_dir, model_str + ".txt")
 if os.path.exists(txtfile):
-    os.system('mv %s %s' % (txtfile, txtfile + ".bak-%s" % nowTime))
+    os.system("mv %s %s" % (txtfile, txtfile + ".bak-%s" % nowTime))
 
 # Set constants
 nb_epoch = args["nb_epoch"]
@@ -121,8 +134,7 @@ LR_gamma = 0.1
 
 
 # Import data
-def import_data(path, val_size, dummify=True,
-                shuffle=True):
+def import_data(path, val_size, dummify=True, shuffle=True):
     global len_train, len_test
     x_all = np.load("{}/{}/x".format(path, args["dataset"]))
     y_all = np.load("{}/{}/y_true".format(path, args["dataset"]))
@@ -164,18 +176,20 @@ def import_data(path, val_size, dummify=True,
 
 # Get loaders
 def get_loaders(data, bs=args["bs"]):
-    train_loader, test_loader = data_utils.get_loader(data.x_train,
-                                                      data.y_train,
-                                                      data.y_noisy,
-                                                      data.r_train,
-                                                      data.x_test,
-                                                      data.y_test,
-                                                      bs=bs)
+    train_loader, test_loader = data_utils.get_loader(
+        data.x_train,
+        data.y_train,
+        data.y_noisy,
+        data.r_train,
+        data.x_test,
+        data.y_test,
+        bs=bs,
+    )
     return train_loader, test_loader
 
 
 def train(train_loader, epoch, model, optimizer, criterion):
-    print('Training %s...' % model_str)
+    print("Training %s..." % model_str)
 
     train_total = 0
     train_correct = 0
@@ -208,17 +222,23 @@ def train(train_loader, epoch, model, optimizer, criterion):
 
         if (i + 1) % args["print_freq"] == 0:
             print(
-                'Epoch [%d/%d], Iter [%d/%d] Training Accuracy: %.4F, Loss: %.4f'
+                "Epoch [%d/%d], Iter [%d/%d] Training Accuracy: %.4F, Loss: %.4f"
                 % (
-                epoch + 1, args["nb_epoch"], i + 1, len_train // args["bs"], acc, loss.data.item())
+                    epoch + 1,
+                    args["nb_epoch"],
+                    i + 1,
+                    len_train // args["bs"],
+                    acc,
+                    loss.data.item(),
+                )
             )
     train_acc = float(train_correct) / float(train_total)
     return total_loss, train_acc
 
 
-# Evaluate the Model
+# Evaluate the model
 def evaluate(test_loader, model):
-    print('Evaluating %s...' % model_str)
+    print("Evaluating %s..." % model_str)
 
     correct = 0
     total = 0
@@ -241,7 +261,9 @@ def main():
     global len_train, len_test
 
     # Import data
-    data = import_data(path=args["import_data_path"], val_size=val_size, dummify=dummy_labels)
+    data = import_data(
+        path=args["import_data_path"], val_size=val_size, dummify=dummy_labels
+    )
     x_train = data.x_train
     y_train = data.y_train
     y_noisy = data.y_noisy
@@ -258,11 +280,13 @@ def main():
         for j in range(n_class):
             if i != j:
                 if len(y_noisy.shape) == 2:
-                    S[i, j] = (to_int(y_noisy)[to_int(y_train) == j] == i).mean() / \
-                              ((to_int(y_noisy)[to_int(y_train) == j] != j).mean())
+                    S[i, j] = (to_int(y_noisy)[to_int(y_train) == j] == i).mean() / (
+                        (to_int(y_noisy)[to_int(y_train) == j] != j).mean()
+                    )
                 else:
-                    S[i, j] = (y_noisy[y_train == j] == i).mean() / \
-                              ((y_noisy[y_train == j] != j).mean())
+                    S[i, j] = (y_noisy[y_train == j] == i).mean() / (
+                        (y_noisy[y_train == j] != j).mean()
+                    )
 
     print("Switch matrix: \n", S)
 
@@ -273,7 +297,7 @@ def main():
         mus = np.array([(r_train[y_noisy == i]).mean() for i in range(n_class)])
     print("Mean diagonal : \n", mus)
 
-    # compute weights against class imbalance
+    # Compute weights against class imbalance
     if dummy_labels:
         count = pd.Series(to_int(y_noisy)).value_counts()
     else:
@@ -312,7 +336,7 @@ def main():
         raise Exception("Invalid model name.")
 
     with open(txtfile, "a") as myfile:
-        myfile.write('epoch: train_acc_loss train_acc test_acc \n')
+        myfile.write("epoch: train_acc_loss train_acc test_acc \n")
 
     # LR scheduler
     if lr_schedule_bool:
@@ -321,15 +345,19 @@ def main():
     # Begin training
     epoch = 0
     train_acc = 0
-    # evaluate models with random weights
+    # Evaluate models with random weights
     test_acc = evaluate(test_loader, model)
-    print('Epoch [%d/%d] Test Accuracy on the %s test images: Model %.4f %%' % (
-    epoch + 1, args["nb_epoch"], len_test, test_acc))
+    print(
+        "Epoch [%d/%d] Test Accuracy on the %s test images: Model %.4f %%"
+        % (epoch + 1, args["nb_epoch"], len_test, test_acc)
+    )
     # save results
     with open(txtfile, "a") as myfile:
-        myfile.write(str(int(epoch)) + ': ' + str(train_acc) + ' ' + str(test_acc) + "\n")
+        myfile.write(
+            str(int(epoch)) + ": " + str(train_acc) + " " + str(test_acc) + "\n"
+        )
 
-    ########### Training ###########
+    # Main training loop
     for epoch in range(nb_epoch):
         model.train()
 
@@ -339,7 +367,7 @@ def main():
         if lr_schedule_bool:
             # Decay Learning Rate
             scheduler.step()
-            print('Epoch:', epoch, 'LR:', scheduler.get_lr())
+            print("Epoch:", epoch, "LR:", scheduler.get_lr())
 
         # Train the network
         train_loss, train_acc = train(train_loader, epoch, model, optimizer, criterion)
@@ -348,13 +376,21 @@ def main():
         test_acc = evaluate(test_loader, model)
 
         print(
-            'Epoch [%d/%d] Test Accuracy on the %s test images: Model %.4f %% ' % (
-                epoch + 1, args["nb_epoch"], len_test, test_acc))
+            "Epoch [%d/%d] Test Accuracy on the %s test images: Model %.4f %% "
+            % (epoch + 1, args["nb_epoch"], len_test, test_acc)
+        )
         with open(txtfile, "a") as myfile:
             myfile.write(
-                str(int(epoch)) + ': ' + str(train_loss) + ' ' + str(train_acc) + ' ' + str(
-                    test_acc) + "\n")
+                str(int(epoch))
+                + ": "
+                + str(train_loss)
+                + " "
+                + str(train_acc)
+                + " "
+                + str(test_acc)
+                + "\n"
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
